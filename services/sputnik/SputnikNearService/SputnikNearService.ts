@@ -276,7 +276,7 @@ class SputnikNearServiceClass {
     }
   }
 
-  private async buildTransaction(
+  public async buildTransaction(
     contractId: string,
     nonce: number,
     actions: transactions.Action[],
@@ -361,17 +361,7 @@ class SputnikNearServiceClass {
     );
   }
 
-  public async createTokenTransferProposal(
-    dao: DAO,
-    proposal: CreateProposalParams | null
-  ) {
-    if (!proposal) {
-      return Promise.resolve();
-    }
-
-    const proposalData = proposal.data as Transfer;
-    const { token_id: tokenContract, receiver_id: recipient } = proposalData;
-
+  public async getAccessKey() {
     const accountId = this.getAccountId();
     const publicKey = await this.getPublicKey();
 
@@ -384,15 +374,35 @@ class SputnikNearServiceClass {
       throw new Error(`Cannot find matching key for transaction`);
     }
 
+    return accessKey;
+  }
+
+  public async getBlock() {
     const block = await this.near.connection.provider.block({
       finality: 'final',
     });
+
+    return block;
+  }
+
+  public async createTokenTransferProposal(
+    dao: DAO,
+    proposal: CreateProposalParams | null
+  ) {
+    if (!proposal) {
+      return Promise.resolve();
+    }
+
+    const proposalData = proposal.data as Transfer;
+    const { token_id: tokenContract, receiver_id: recipient } = proposalData;
+
+    const accessKey = await this.getAccessKey();
+
+    const block = await this.getBlock();
     const blockHash = utils.serialize.base_decode(block.header.hash);
 
     const nonce1 = accessKey.nonce + 1;
     const nonce2 = accessKey.nonce + 2;
-
-    const account = (this.sputnikWalletService.getAccount() as unknown) as SputnikConnectedWalletAccount;
 
     const storageDepositTransaction = await this.getTransferStorageDepositTransaction(
       nonce1,
@@ -410,6 +420,12 @@ class SputnikNearServiceClass {
     const trx = tokenContract
       ? [storageDepositTransaction, transferTransaction]
       : [transferTransaction];
+
+    return this.sendTransactions(compact(trx));
+  }
+
+  public sendTransactions(trx: transactions.Transaction[]) {
+    const account = (this.sputnikWalletService.getAccount() as unknown) as SputnikConnectedWalletAccount;
 
     return account.sendTransactions(compact(trx));
   }
