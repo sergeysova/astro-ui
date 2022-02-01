@@ -32,10 +32,12 @@ export interface CreateProposalCardProps {
   onTypeSelect: (newType: ProposalVariant) => void;
   onClose?: () => void;
   userPermissions: UserPermissions;
+  showClose: boolean;
 }
 
 export const CreateProposalCard: React.FC<CreateProposalCardProps> = ({
   type,
+  showClose,
   proposer,
   content,
   onTypeSelect,
@@ -53,6 +55,22 @@ export const CreateProposalCard: React.FC<CreateProposalCardProps> = ({
     () => getProposalTypesOptions(userPermissions.isCanCreatePolicyProposals),
     [userPermissions]
   );
+
+  function renderCloseButton() {
+    if (showClose) {
+      return (
+        <div className={styles.actionBar}>
+          <IconButton
+            icon="close"
+            className={styles.action}
+            onClick={() => onClose?.()}
+          />
+        </div>
+      );
+    }
+
+    return null;
+  }
 
   return (
     <div className={styles.root}>
@@ -139,13 +157,7 @@ export const CreateProposalCard: React.FC<CreateProposalCardProps> = ({
         <Icon name="votingNoChecked" className={styles.voteIcon} />
       </div>
 
-      <div className={styles.actionBar}>
-        <IconButton
-          icon="close"
-          className={styles.action}
-          onClick={() => onClose?.()}
-        />
-      </div>
+      {renderCloseButton()}
     </div>
   );
 };

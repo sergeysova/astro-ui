@@ -194,6 +194,11 @@ export function getProposalTypesOptions(
           value: ProposalVariant.ProposeChangeDaoLegalInfo,
           group: 'Change Config',
         },
+        {
+          label: 'Create Token',
+          value: ProposalVariant.ProposeCreateToken,
+          group: 'Change Config',
+        },
       ],
     },
     {

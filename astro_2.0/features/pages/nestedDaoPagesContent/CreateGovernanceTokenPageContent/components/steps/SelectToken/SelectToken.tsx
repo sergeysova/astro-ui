@@ -1,5 +1,9 @@
+import { useRouter } from 'next/router';
 import React, { useState, VFC } from 'react';
 import { useTranslation } from 'next-i18next';
+
+import { CREATE_GOV_TOKEN_PAGE_URL } from 'constants/routing';
+import { STEPS } from 'astro_2.0/features/pages/nestedDaoPagesContent/CreateGovernanceTokenPageContent/constants';
 
 import { Icon, IconName } from 'components/Icon';
 
@@ -13,7 +17,11 @@ import { TokenOption } from './components/TokenOption';
 import styles from './SelectToken.module.scss';
 
 export const SelectToken: VFC = () => {
+  const router = useRouter();
+
   const { t } = useTranslation();
+
+  const { dao } = router.query;
 
   const [option, setOption] = useState(TOKEN_OPTIONS.NEW);
 
@@ -44,6 +52,13 @@ export const SelectToken: VFC = () => {
           capitalize
           variant="secondary"
           className={styles.nextStepButton}
+          href={{
+            pathname: CREATE_GOV_TOKEN_PAGE_URL,
+            query: {
+              dao,
+              step: STEPS.CREATE_TOKEN,
+            },
+          }}
         >
           {t('createGovernanceTokenPage.selectToken.nextStep')}
           <Icon className={styles.buttonIcon} name="buttonArrowRight" />
