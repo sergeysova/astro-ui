@@ -2,7 +2,7 @@ export { awsConfig } from './aws';
 
 export const appConfig = {
   API_URL: process.browser
-    ? `${window.APP_CONFIG.API_URL}/api/v1/`
+    ? `${window.APP_CONFIG?.API_URL}/api/v1/`
     : `${process.env.API_URL}/api/v1/`,
   LOCAL_WALLET_REDIRECT: process.env.LOCAL_WALLET_REDIRECT,
   STATS_API_URL: process.env.STATS_API_URL,
@@ -13,6 +13,7 @@ export const appConfig = {
   AWS_REGION: '',
   GOOGLE_ANALYTICS_KEY: process.env.GOOGLE_ANALYTICS_KEY,
   LOG_ROCKET_APP_ID: process.env.LOG_ROCKET_APP_ID,
+  NEXT_PUBLIC_LAUNCHDARKLY_ID: process.env.NEXT_PUBLIC_LAUNCHDARKLY_ID,
   RELEASE_NOTES: process.env.RELEASE_NOTES,
   I18_RELOAD_ON_PRERENDER: false,
   TOASTS_NOTIFICATIONS_TIMEOUT: 0,

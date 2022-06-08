@@ -3,6 +3,7 @@ export type Config = {
   AWS_REGION: string;
   GOOGLE_ANALYTICS_KEY: string;
   LOG_ROCKET_APP_ID: string;
+  NEXT_PUBLIC_LAUNCHDARKLY_ID: string;
   RELEASE_NOTES: string;
   I18_RELOAD_ON_PRERENDER: boolean;
   API_URL: string;
