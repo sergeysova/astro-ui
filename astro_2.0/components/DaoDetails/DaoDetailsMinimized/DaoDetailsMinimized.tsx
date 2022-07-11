@@ -55,6 +55,7 @@ export const DaoDetailsMinimized: FC<DaoDetailsMinimizedProps> = ({
     drafts: `/dao/${dao.id}/drafts`,
     proposals: `/dao/${dao.id}/proposals`,
     funds: `/dao/${dao.id}/treasury/tokens`,
+    streaming: `/dao/${dao.id}/streaming`,
     members: `/dao/${dao.id}/groups/all`,
     settings: `/dao/${dao.id}/governance/settings`,
     nfts: `/dao/${dao.id}/treasury/nfts`,
@@ -154,6 +155,15 @@ export const DaoDetailsMinimized: FC<DaoDetailsMinimizedProps> = ({
           >
             {t('daoDetailsMinimized.funds')}
           </ActionButton>
+          {flags.roketoStreaming && (
+            <ActionButton
+              iconName="roketoStreaming"
+              onClick={() => handleChapterClick(url.streaming)}
+              className={generateChapterStyle('streaming')}
+            >
+              {t('daoDetailsMinimized.streaming')}
+            </ActionButton>
+          )}
           <ActionButton
             iconName="groups"
             onClick={() => handleChapterClick(url.members)}
