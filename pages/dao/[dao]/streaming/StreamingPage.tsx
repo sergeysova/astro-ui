@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useMemo } from 'react';
 import { useGetBreadcrumbsConfig } from 'hooks/useGetBreadcrumbsConfig';
 import { NestedDaoPageWrapper } from 'astro_2.0/features/pages/nestedDaoPagesContent/NestedDaoPageWrapper';
+import { FunctionCallType } from 'astro_2.0/features/CreateProposal/components/CustomFunctionCallContent/types';
 import { ProposalVariant } from 'types/proposal';
 
 export interface StreamingPageProps {
@@ -40,6 +41,7 @@ const StreamingPage: NextPage<StreamingPageProps> = ({
       daoContext={daoContext}
       breadcrumbs={breadcrumbs}
       defaultProposalType={ProposalVariant.ProposeCustomFunctionCall}
+      defaultFunctionCallType={FunctionCallType.CreateRoketoStream}
     >
       {renderContent()}
     </NestedDaoPageWrapper>

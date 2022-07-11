@@ -40,12 +40,14 @@ import {
 import { CreateProposalCard } from './components/CreateProposalCard';
 
 import styles from './CreateProposal.module.scss';
+import { FunctionCallType } from './components/CustomFunctionCallContent/types';
 
 export interface CreateProposalProps {
   className?: string;
   dao: DAO;
   proposalVariant?: ProposalVariant;
   daoTokens: Record<string, Token>;
+  defaultFunctionCallType?: FunctionCallType;
   showFlag?: boolean;
   bountyId?: number;
   onCreate?: (proposalId: number | number[] | null) => void;
@@ -63,6 +65,7 @@ export const CreateProposal: FC<CreateProposalProps> = ({
   className,
   dao,
   daoTokens,
+  defaultFunctionCallType,
   proposalVariant = ProposalVariant.ProposeTransfer,
   showFlag = true,
   bountyId,
@@ -143,7 +146,11 @@ export const CreateProposal: FC<CreateProposalProps> = ({
     daoTokens,
   });
 
-  const contentNode = getFormContentNode(selectedProposalVariant, dao);
+  const contentNode = getFormContentNode(
+    selectedProposalVariant,
+    dao,
+    defaultFunctionCallType
+  );
 
   const nonEditableGas = getNonEditableGasValue(
     selectedProposalVariant,

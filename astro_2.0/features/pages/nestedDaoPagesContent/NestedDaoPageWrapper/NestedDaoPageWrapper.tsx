@@ -23,12 +23,14 @@ import { CreateExternalProposal } from 'astro_2.0/features/CreateExternalProposa
 
 import { useDaoCustomTokens } from 'hooks/useCustomTokens';
 import { useCreateProposal } from 'astro_2.0/features/CreateProposal/hooks';
+import { FunctionCallType } from 'astro_2.0/features/CreateProposal/components/CustomFunctionCallContent/types';
 
 import styles from './NestedDaoPageWrapper.module.scss';
 
 interface NestedDaoPageWrapperProps {
   daoContext: DaoContext;
   defaultProposalType?: ProposalVariant;
+  defaultFunctionCallType?: FunctionCallType;
   breadcrumbs: {
     href?: string | UrlObject;
     label: string;
@@ -41,6 +43,7 @@ export const NestedDaoPageWrapper: FC<NestedDaoPageWrapperProps> = props => {
   const {
     daoContext: { dao, userPermissions, policyAffectsProposals },
     defaultProposalType = ProposalVariant.ProposeTransfer,
+    defaultFunctionCallType,
     breadcrumbs,
     children,
     className,
@@ -120,6 +123,7 @@ export const NestedDaoPageWrapper: FC<NestedDaoPageWrapperProps> = props => {
           daoTokens={tokens}
           userPermissions={userPermissions}
           proposalVariant={defaultProposalType}
+          defaultFunctionCallType={defaultFunctionCallType}
           showFlag={false}
           onCreate={handleProposalDone}
           onClose={handleProposalDone}

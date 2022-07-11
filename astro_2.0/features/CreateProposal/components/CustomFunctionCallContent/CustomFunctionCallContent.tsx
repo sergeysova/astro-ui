@@ -23,13 +23,15 @@ ace.config.set(
 
 interface CustomFunctionCallContentProps {
   dao: DAO;
+  defaultCallType?: FunctionCallType;
 }
 
 const CustomFunctionCallContent: FC<CustomFunctionCallContentProps> = ({
   dao,
+  defaultCallType,
 }) => {
   const { watch } = useFormContext();
-  const type = watch('functionCallType');
+  const type = defaultCallType ?? watch('functionCallType');
 
   switch (type) {
     case FunctionCallType.SwapsOnRef: {

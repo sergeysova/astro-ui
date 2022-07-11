@@ -348,7 +348,8 @@ function getUniqueGroups(dao: DAO) {
 
 export function getFormContentNode(
   proposalType: ProposalVariant,
-  dao: DAO
+  dao: DAO,
+  defaultFunctionCallType?: FunctionCallType
 ): ReactNode | null {
   switch (proposalType) {
     case ProposalVariant.ProposeGetUpgradeCode: {
@@ -403,7 +404,12 @@ export function getFormContentNode(
       return <ChangeBondsContent dao={dao} />;
     }
     case ProposalVariant.ProposeCustomFunctionCall: {
-      return <CustomFunctionCallContent dao={dao} />;
+      return (
+        <CustomFunctionCallContent
+          defaultCallType={defaultFunctionCallType}
+          dao={dao}
+        />
+      );
     }
     case ProposalVariant.ProposeStakingContractDeployment: {
       return <DeployStakingContractContent />;
