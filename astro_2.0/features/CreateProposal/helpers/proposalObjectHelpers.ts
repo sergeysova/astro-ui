@@ -442,8 +442,6 @@ export async function getCreateRoketoStreamProposal(
 ): Promise<CreateProposalParams> {
   const { externalUrl, details, actions, receipt } = data;
   const proposalDescription = `${details}${DATA_SEPARATOR}${externalUrl}`;
-  const config = configService.get();
-  const multicallContract = config.appConfig.ROKETO_MULTICALL_NAME;
 
   const token = Object.values(tokens).find(item => item.id === data.tokenId);
 
@@ -469,7 +467,7 @@ export async function getCreateRoketoStreamProposal(
     });
 
     proposalData = {
-      receiver_id: multicallContract,
+      receiver_id: '', // multicallContract,
       actions: [
         {
           method_name: 'multicall',

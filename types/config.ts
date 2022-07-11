@@ -13,7 +13,6 @@ export type Config = {
   LOCAL_WALLET_REDIRECT: boolean;
   NEAR_CONTRACT_NAME: string;
   ROKETO_CONTRACT_NAME: string;
-  ROKETO_MULTICALL_NAME: string;
   TOKEN_FACTORY_CONTRACT_NAME: string;
   LAUNCHDARKLY_ID: string;
   LAUNCHDARKLY_SDK_KEY: string;
