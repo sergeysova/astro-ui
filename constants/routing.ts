@@ -25,6 +25,8 @@ export const SINGLE_PROPOSAL_PAGE_URL = `${ALL_PROPOSALS_PAGE_URL}/[proposal]`;
 
 export const GROUPS_PAGE_URL = '/dao/[dao]/groups/[group]';
 
+export const STREAMING_URL = `${SINGLE_DAO_PAGE}/streaming`;
+
 const TREASURY_URL = '/dao/[dao]/treasury';
 export const TREASURY_PAGE_URL = `${TREASURY_URL}/tokens`;
 export const GOVERNANCE_TOKEN_INFO_URL = `${TREASURY_URL}/governance-token-info`;
