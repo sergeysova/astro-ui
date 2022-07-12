@@ -334,6 +334,7 @@ export function getContentNode(proposal: ProposalFeedItem): ReactNode {
                 methodName={data.methodName}
                 json={JSON.stringify(json, null, 2)}
                 deposit={data.deposit}
+                actions={kind.actions}
               />
             );
             break;
@@ -562,6 +563,7 @@ export function getContentNode(proposal: ProposalFeedItem): ReactNode {
                 methodName={data.methodName}
                 json={json}
                 deposit={data.deposit}
+                actions={kind.actions}
               />
             );
             break;

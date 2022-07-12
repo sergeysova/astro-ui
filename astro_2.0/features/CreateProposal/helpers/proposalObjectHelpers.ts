@@ -479,19 +479,20 @@ export async function getCreateRoketoStreamProposal(
         },
       ],
     };
-  } else {
-    actions?.forEach(action => {
-      proposalData = {
-        receiver_id: action.contract,
-        actions: [
-          {
-            method_name: action.method,
-            args: Buffer.from(JSON.stringify(action.args)).toString('base64'),
-            deposit: action.deposit ?? '1',
-            gas: action.gas ?? formatGasValue('270').toString(),
-          },
-        ],
-      };
+  } else if (actions) {
+    const firstAction = actions[0];
+
+    if (firstAction) {
+      proposalData.receiver_id = firstAction.contract;
+    }
+
+    actions.forEach(action => {
+      proposalData.actions.push({
+        method_name: action.method,
+        args: Buffer.from(JSON.stringify(action.args)).toString('base64'),
+        deposit: action.deposit ?? '1',
+        gas: action.gas ?? formatGasValue('270').toString(),
+      });
     });
   }
 

@@ -1,6 +1,5 @@
 import { DAO } from 'types/dao';
 import React, { useEffect, useMemo, VFC } from 'react';
-import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 import cn from 'classnames';
 import Decimal from 'decimal.js';
@@ -9,15 +8,16 @@ import parseDuration from 'parse-duration';
 import { TokenFormatter } from '@roketo/sdk/ft';
 
 import { useDepositWidth } from 'astro_2.0/features/CreateProposal/components/CustomFunctionCallContent/hooks';
+import { InputWrapper } from 'astro_2.0/features/CreateProposal/components/InputWrapper';
+import { LoadingIndicator } from 'astro_2.0/components/LoadingIndicator';
+import { useCustomTokensContext } from 'astro_2.0/features/CustomTokens/CustomTokensContext';
+import { FunctionCallType } from 'astro_2.0/features/CreateProposal/components/CustomFunctionCallContent/types';
 import { Input } from 'components/inputs/Input';
-import { Token } from 'types/token';
 import { DropdownSelect } from 'components/inputs/selects/DropdownSelect';
 import { Icon } from 'components/Icon';
 import { TextArea } from 'components/inputs/TextArea';
-import { InputWrapper } from 'astro_2.0/features/CreateProposal/components/InputWrapper';
-import { LoadingIndicator } from 'astro_2.0/components/LoadingIndicator';
+import { Token } from 'types/token';
 import { formatCurrency } from 'utils/formatCurrency';
-import { useCustomTokensContext } from 'astro_2.0/features/CustomTokens/CustomTokensContext';
 
 import styles from './CreateRoketoStream.module.scss';
 import { useRoketoReceipt, useRoketoStorageDeposit } from './hooks';
@@ -26,9 +26,7 @@ interface CreateRoketoStreamProps {
   dao: DAO;
 }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 export const CreateRoketoStream: VFC<CreateRoketoStreamProps> = ({ dao }) => {
-  const { t } = useTranslation();
   const { register, setValue, getValues, watch } = useFormContext();
   const depositWidth = useDepositWidth();
   const { tokens } = useCustomTokensContext();
@@ -45,6 +43,12 @@ export const CreateRoketoStream: VFC<CreateRoketoStreamProps> = ({ dao }) => {
       ),
     [tokens]
   );
+
+  useEffect(() => {
+    setValue('functionCallType', FunctionCallType.CreateRoketoStream);
+    // Disabled, because `setValue` is updates on each render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const tokenToCheckForDeposit =
     selectedTokenId === 'NEAR'
@@ -80,24 +84,32 @@ export const CreateRoketoStream: VFC<CreateRoketoStreamProps> = ({ dao }) => {
   );
 
   const duration = watch('duration');
-  const speed = useMemo(() => {
+  const speed = watch('speed');
+
+  useEffect(() => {
     const durationMs = parseDuration(duration ?? '');
 
-    if (!durationMs || !selectedToken) {
-      return { formattedValue: '0', unit: 'second' };
+    if (durationMs && selectedToken) {
+      const durationSeconds = new Decimal(durationMs).div(1000);
+      const speedInYocto = new Decimal(amountToStream)
+        .div(durationSeconds)
+        .toFixed();
+
+      setValue('speed', speedInYocto);
+    } else {
+      setValue('speed', '0');
+    }
+  }, [setValue, duration, amountToStream, selectedToken]);
+
+  const speedInHuman = useMemo(() => {
+    if (selectedToken && speed !== '0') {
+      const formatter = new TokenFormatter(selectedToken.decimals);
+
+      return formatter.tokensPerMeaningfulPeriod(speed);
     }
 
-    const durationSeconds = new Decimal(durationMs).div(1000);
-    const speedInYocto = new Decimal(amountToStream)
-      .div(durationSeconds)
-      .toFixed();
-
-    setValue('speed', speedInYocto);
-
-    const formatter = new TokenFormatter(selectedToken.decimals);
-
-    return formatter.tokensPerMeaningfulPeriod(speedInYocto);
-  }, [setValue, duration, amountToStream, selectedToken]);
+    return { formattedValue: '0', unit: 'second' };
+  }, [speed, selectedToken]);
 
   const { total, actions, positions } = useRoketoReceipt({
     daoId: dao.id,
@@ -105,7 +117,7 @@ export const CreateRoketoStream: VFC<CreateRoketoStreamProps> = ({ dao }) => {
     tokenId: selectedToken?.id || 'NEAR',
     tokenDecimals: selectedToken?.decimals ?? 24,
     receiverId: watch('receiverId') ?? '',
-    speedTokensPerSec: watch('speed'),
+    speedTokensPerSec: speed,
     streamComment: watch('comment'),
     storageDeposit: {
       forSender: shouldDepositForDao ?? false,
@@ -115,6 +127,7 @@ export const CreateRoketoStream: VFC<CreateRoketoStreamProps> = ({ dao }) => {
 
   useEffect(() => {
     setValue('receipt', { total, positions });
+    setValue('deposit', new Decimal(total.NEAR ?? '0'));
   }, [total, positions, setValue]);
 
   useEffect(() => {
@@ -241,9 +254,9 @@ export const CreateRoketoStream: VFC<CreateRoketoStreamProps> = ({ dao }) => {
             size="block"
             onChange={() => null}
             value={
-              speed.formattedValue === '0'
+              speedInHuman.formattedValue === '0'
                 ? ''
-                : `${speed.formattedValue} ${selectedToken?.symbol} / ${speed.unit}`
+                : `${speedInHuman.formattedValue} ${selectedToken?.symbol} / ${speedInHuman.unit}`
             }
           />
         </InputWrapper>

@@ -815,12 +815,6 @@ export function getValidationSchema(
             duration: yup.string().required(t('validation.required')),
             receiverId: yup.string().required(t('validation.required')),
             comment: yup.string(),
-            receipt: yup.object().shape({
-              // eslint-disable-next-line react/forbid-prop-types
-              total: yup.object(),
-              // eslint-disable-next-line react/forbid-prop-types
-              positions: yup.array(),
-            }),
             details: yup.string().required(t('validation.required')),
             externalUrl: yup.string().url(),
           });

@@ -10,9 +10,9 @@ import { Icon } from 'components/Icon';
 import { useCustomTokensContext } from 'astro_2.0/features/CustomTokens/CustomTokensContext';
 
 import { formatYoktoValue } from 'utils/format';
+import { FunctionCallAction } from 'types/proposal';
 
 import { CommonContent } from './components/CommonContent';
-
 import { useRoketoStreamCheck } from './components/helpers';
 import { CreateStreamContent } from './components/Stream/CreateStreamContent';
 
@@ -24,6 +24,7 @@ interface CustomFunctionCallContentProps {
   methodName: string;
   json: string;
   deposit: string;
+  actions: FunctionCallAction[];
 }
 
 export const CustomFunctionCallContent: FC<CustomFunctionCallContentProps> = ({
