@@ -230,15 +230,14 @@ export function useRoketoReceipt({
         }
       );
       actions.push(
-        // TODO: reenable when support contract will be available for RoketoStreaming
-        // {
-        //   contract: wrap.account_id,
-        //   method: 'near_deposit',
-        //   args: {},
-        //   deposit: new Decimal(amountToStream)
-        //     .plus(wrap.commission_on_create)
-        //     .toFixed(),
-        // },
+        {
+          contract: wrap.account_id,
+          method: 'near_deposit',
+          args: {},
+          deposit: new Decimal(amountToStream)
+            .plus(wrap.commission_on_create)
+            .toFixed(),
+        },
         createStreamTransferCall({
           amountToStream,
           createCommission: wrap.commission_on_create,
