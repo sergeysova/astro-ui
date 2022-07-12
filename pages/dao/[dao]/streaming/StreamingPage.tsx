@@ -8,6 +8,8 @@ import { NestedDaoPageWrapper } from 'astro_2.0/features/pages/nestedDaoPagesCon
 import { FunctionCallType } from 'astro_2.0/features/CreateProposal/components/CustomFunctionCallContent/types';
 import { ProposalVariant } from 'types/proposal';
 
+import styles from './StreamingPage.module.scss';
+
 export interface StreamingPageProps {
   daoContext: DaoContext;
 }
@@ -31,7 +33,7 @@ const StreamingPage: NextPage<StreamingPageProps> = ({
         <Head>
           <title>Streaming</title>
         </Head>
-        <div>Hi!</div>
+        <div className={styles.root}>Hi!</div>
       </>
     );
   }
