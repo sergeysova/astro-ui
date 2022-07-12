@@ -237,6 +237,7 @@ export function useRoketoReceipt({
           deposit: new Decimal(amountToStream)
             .plus(wrap.commission_on_create)
             .toFixed(),
+          gas: formatGasValue('5').toString(),
         },
         createStreamTransferCall({
           amountToStream,
