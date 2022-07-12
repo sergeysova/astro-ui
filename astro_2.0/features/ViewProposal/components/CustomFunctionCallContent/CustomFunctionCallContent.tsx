@@ -33,10 +33,11 @@ export const CustomFunctionCallContent: FC<CustomFunctionCallContentProps> = ({
   methodName,
   json,
   deposit,
+  actions,
 }) => {
   const { tokens } = useCustomTokensContext();
   const { t } = useTranslation();
-  const isStream = useRoketoStreamCheck(json);
+  const isStream = useRoketoStreamCheck(actions);
 
   const tokenData = token ? tokens[token] : tokens.NEAR;
 
